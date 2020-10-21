@@ -49,7 +49,7 @@ RUN apt-get update && \
 
 # dotnet (core)
     curl https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor > /etc/apt/trusted.gpg.d/microsoft.gpg && \
-    echo "deb [arch=amd64] https://packages.microsoft.com/repos/microsoft-ubuntu-xenial-prod xenial main" > \
+    echo "deb [arch=aarch64] https://packages.microsoft.com/repos/microsoft-ubuntu-xenial-prod xenial main" > \
       /etc/apt/sources.list.d/dotnetdev.list && \
 
 # node.js
@@ -138,7 +138,7 @@ RUN apt-get install -y --no-install-recommends \
 
 # golang
 ENV GOLANG_VERSION 1.10.8
-ENV GOLANG_DOWNLOAD_URL https://golang.org/dl/go$GOLANG_VERSION.linux-amd64.tar.gz
+ENV GOLANG_DOWNLOAD_URL https://golang.org/dl/go$GOLANG_VERSION.linux-arm64.tar.gz
 ENV GOLANG_DOWNLOAD_SHA256 d8626fb6f9a3ab397d88c483b576be41fa81eefcec2fd18562c87626dbb3c39e
 RUN curl -fsSL "$GOLANG_DOWNLOAD_URL" -o golang.tar.gz && \
       echo "$GOLANG_DOWNLOAD_SHA256  golang.tar.gz" | sha256sum -c - && \
@@ -151,8 +151,8 @@ RUN apt-get install -y --no-install-recommends \
 `# Haskell dependencies` \
       ghc && \
     cd /tmp && \
-    wget -q https://www.haskell.org/cabal/release/cabal-install-1.24.0.2/cabal-install-1.24.0.2-x86_64-unknown-linux.tar.gz && \
-    tar xzf cabal-install-1.24.0.2-x86_64-unknown-linux.tar.gz && \
+    wget -q https://www.haskell.org/cabal/release/cabal-install-1.24.0.2/cabal-install-1.24.0.2-arm64-unknown-linux.tar.gz && \
+    tar xzf cabal-install-1.24.0.2-arm64-unknown-linux.tar.gz && \
     find dist-newstyle/ -type f -name cabal -exec mv {} /usr/bin \; && \
     rm -rf /tmp/cabal* && \
     cabal --version && \
