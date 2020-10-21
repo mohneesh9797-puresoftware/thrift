@@ -99,7 +99,7 @@ RUN \
     #./install.sh && \
     #sbcl --version && \
     #cd .. && \
-    rm -rf sbcl*
+    #rm -rf sbcl*
 
 ENV D_VERSION     2.087.0
 ENV DMD_DEB       dmd_2.087.0-0_arm64.deb
