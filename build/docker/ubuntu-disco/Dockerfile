@@ -93,16 +93,16 @@ ENV SBCL_VERSION 1.5.3
 RUN \
 `# Common Lisp (sbcl) dependencies` \
     curl --version && \
-    curl -o sbcl-${SBCL_VERSION}-x86-64-linux-binary.tar.bz2 -J -L https://sourceforge.net/projects/sbcl/files/sbcl/${SBCL_VERSION}/sbcl-${SBCL_VERSION}-x86-64-linux-binary.tar.bz2/download?use_mirror=managedway# && \
-    tar xjf sbcl-${SBCL_VERSION}-x86-64-linux-binary.tar.bz2 && \
-    cd sbcl-${SBCL_VERSION}-x86-64-linux && \
+    curl -o sbcl-${SBCL_VERSION}-arm64-linux-binary.tar.bz2 -J -L https://sourceforge.net/projects/sbcl/files/sbcl/${SBCL_VERSION}/sbcl-${SBCL_VERSION}-arm64-linux-binary.tar.bz2/download?use_mirror=managedway# && \
+    tar xjf sbcl-${SBCL_VERSION}-arm64-linux-binary.tar.bz2 && \
+    cd sbcl-${SBCL_VERSION}-arm6464-linux && \
     ./install.sh && \
     sbcl --version && \
     cd .. && \
     rm -rf sbcl*
 
 ENV D_VERSION     2.087.0
-ENV DMD_DEB       dmd_2.087.0-0_amd64.deb
+ENV DMD_DEB       dmd_2.087.0-0_arm64.deb
 RUN \
 `# D dependencies` \
     wget -q http://downloads.dlang.org/releases/2.x/${D_VERSION}/${DMD_DEB} && \
@@ -141,7 +141,7 @@ RUN apt-get install -y --no-install-recommends \
 
 # golang
 ENV GOLANG_VERSION 1.12.6
-ENV GOLANG_DOWNLOAD_URL https://golang.org/dl/go$GOLANG_VERSION.linux-amd64.tar.gz
+ENV GOLANG_DOWNLOAD_URL https://golang.org/dl/go$GOLANG_VERSION.linux-arm64.tar.gz
 ENV GOLANG_DOWNLOAD_SHA256 dbcf71a3c1ea53b8d54ef1b48c85a39a6c9a935d01fc8291ff2b92028e59913c
 RUN curl -fsSL "$GOLANG_DOWNLOAD_URL" -o golang.tar.gz && \
       echo "$GOLANG_DOWNLOAD_SHA256  golang.tar.gz" | sha256sum -c - && \
@@ -266,9 +266,9 @@ ENV PATH /root/.cargo/bin:$PATH
 #       cppcheck \
 #       sloccount && \
 #     pip install flake8 && \
-#     wget -q "https://launchpad.net/ubuntu/+source/cppcheck/1.83-2/+build/14874703/+files/cppcheck_1.83-2_amd64.deb" && \
-#     dpkg -i cppcheck_1.83-2_amd64.deb && \
-#     rm cppcheck_1.83-2_amd64.deb
+#     wget -q "https://launchpad.net/ubuntu/+source/cppcheck/1.83-2/+build/14874703/+files/cppcheck_1.83-2_arm64.deb" && \
+#     dpkg -i cppcheck_1.83-2_arm64.deb && \
+#     rm cppcheck_1.83-2_arm64.deb
 
 # Clean up
 RUN rm -rf /var/cache/apt/* && \
