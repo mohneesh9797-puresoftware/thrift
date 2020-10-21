@@ -25,6 +25,9 @@
 # 
 
 sudo: required
+group: edge
+arch: arm64-graviton2
+virt: vm
 dist: trusty
 language: cpp
 
