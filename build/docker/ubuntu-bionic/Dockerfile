@@ -93,7 +93,7 @@ ENV SBCL_VERSION 1.5.3
 RUN \
 `# Common Lisp (sbcl) dependencies` \
     curl --version && \
-    curl -o sbcl-${SBCL_VERSION}-arm64-linux-binary.tar.bz2 -J -L https://sourceforge.net/projects/sbcl/files/sbcl/${SBCL_VERSION}/sbcl-${SBCL_VERSION}-arm64-linux-binary.tar.bz2/download?use_mirror=managedway# && \
+    curl -o sbcl-${SBCL_VERSION}-aarch64-linux-binary.tar.bz2 -J -L https://sourceforge.net/projects/sbcl/files/sbcl/${SBCL_VERSION}/sbcl-${SBCL_VERSION}-aarch64-linux-binary.tar.bz2/download?use_mirror=managedway# && \
     #tar xjf sbcl-${SBCL_VERSION}-arm64-linux-binary.tar.bz2 && \
     #cd sbcl-${SBCL_VERSION}-arm64-linux && \
     #./install.sh && \
@@ -102,7 +102,7 @@ RUN \
     #rm -rf sbcl*
 
 ENV D_VERSION     2.087.0
-ENV DMD_DEB       dmd_2.087.0-0_arm64.deb
+ENV DMD_DEB       dmd_2.087.0-0_aarch64.deb
 RUN \
 `# D dependencies` \
     wget -q http://downloads.dlang.org/releases/2.x/${D_VERSION}/${DMD_DEB} && \
