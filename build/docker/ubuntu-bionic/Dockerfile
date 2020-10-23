@@ -94,9 +94,9 @@ RUN \
 `# Common Lisp (sbcl) dependencies` \
     curl --version && \
     curl -o sbcl-${SBCL_VERSION}-arm64-linux-binary.tar.bz2 -J -L https://sourceforge.net/projects/sbcl/files/sbcl/${SBCL_VERSION}/sbcl-${SBCL_VERSION}-arm64-linux-binary.tar.bz2/download?use_mirror=managedway# && \
-    tar xjf sbcl-${SBCL_VERSION}-arm64-linux-binary.tar.bz2 && \
-    cd sbcl-${SBCL_VERSION}-arm64-linux && \
-    ./install.sh && \
-    sbcl --version && \
-    cd .. && \
-    rm -rf sbcl*
+    tar xjf sbcl-${SBCL_VERSION}-arm64-linux-binary.tar.bz2 \
+    #cd sbcl-${SBCL_VERSION}-arm64-linux && \
+    #./install.sh && \
+    #sbcl --version && \
+    #cd .. && \
+    #rm -rf sbcl*
