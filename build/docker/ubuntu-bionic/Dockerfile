@@ -96,7 +96,8 @@ RUN \
     wget http://prdownloads.sourceforge.net/sbcl/sbcl-${SBCL_VERSION}-arm64-linux-binary.tar.bz2 && \
     tar xfj sbcl-${SBCL_VERSION}-arm64-linux-binary.tar.bz2 && \
     cd sbcl-${SBCL_VERSION}-arm64-linux && \
-    ./install.sh && \
-    sbcl --version && \
-    cd .. && \
-    rm -rf sbcl*
+    ls
+    #./install.sh && \
+    #sbcl --version && \
+    #cd .. && \
+    #rm -rf sbcl*
