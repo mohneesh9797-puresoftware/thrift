@@ -96,8 +96,184 @@ RUN \
     wget http://prdownloads.sourceforge.net/sbcl/sbcl-${SBCL_VERSION}-arm64-linux-binary.tar.bz2 && \
     tar xfj sbcl-${SBCL_VERSION}-arm64-linux-binary.tar.bz2 && \
     cd sbcl-${SBCL_VERSION}-arm64-linux && \
-    ls
-    #./install.sh && \
-    #sbcl --version && \
-    #cd .. && \
-    #rm -rf sbcl*
+    ./install.sh && \
+    sbcl --version && \
+    cd .. && \
+    rm -rf sbcl*
+    
+ENV D_VERSION     2.087.0
+ENV DMD_DEB       dmd_2.087.0-0_amd64.deb
+RUN \
+`# D dependencies` \
+    wget -q http://downloads.dlang.org/releases/2.x/${D_VERSION}/${DMD_DEB} && \
+    dpkg --install ${DMD_DEB} && \
+    rm -f ${DMD_DEB} && \
+    mkdir -p /usr/include/dmd/druntime/import/deimos /usr/include/dmd/druntime/import/C && \
+    git clone -b 'v2.0.2+2.0.16' https://github.com/D-Programming-Deimos/libevent.git deimos-libevent-2.0 && \
+    mv deimos-libevent-2.0/deimos/* /usr/include/dmd/druntime/import/deimos/ && \
+    mv deimos-libevent-2.0/C/* /usr/include/dmd/druntime/import/C/ && \
+    rm -rf deimos-libevent-2.0 && \
+    git clone -b 'v2.0.0+1.1.0h' https://github.com/D-Programming-Deimos/openssl.git deimos-openssl-1.1.0h && \
+    mv deimos-openssl-1.1.0h/deimos/* /usr/include/dmd/druntime/import/deimos/ && \
+    mv deimos-openssl-1.1.0h/C/* /usr/include/dmd/druntime/import/C/ && \
+    rm -rf deimos-openssl-1.1.0h
+
+ENV DART_VERSION 2.4.0-1
+RUN apt-get install -y --no-install-recommends \
+      `# Dart dependencies` \
+      dart=$DART_VERSION
+ENV PATH /usr/lib/dart/bin:$PATH
+
+RUN apt-get install -y --no-install-recommends \
+`# dotnet core dependencies` \
+      dotnet-sdk-3.1
+
+RUN apt-get install -y --no-install-recommends \
+`# Erlang dependencies` \
+      erlang && \
+    wget https://s3.amazonaws.com/rebar3/rebar3 -O /usr/bin/rebar3 && \
+    chmod 755 /usr/bin/rebar3 && \
+    rebar3 --version
+
+RUN apt-get install -y --no-install-recommends \
+`# GlibC dependencies` \
+      libglib2.0-dev
+
+# golang
+ENV GOLANG_VERSION 1.13.1
+ENV GOLANG_DOWNLOAD_URL https://golang.org/dl/go$GOLANG_VERSION.linux-amd64.tar.gz
+ENV GOLANG_DOWNLOAD_SHA256 94f874037b82ea5353f4061e543681a0e79657f787437974214629af8407d124
+RUN curl -fsSL "$GOLANG_DOWNLOAD_URL" -o golang.tar.gz && \
+      echo "$GOLANG_DOWNLOAD_SHA256  golang.tar.gz" | sha256sum -c - && \
+            tar -C /usr/local -xzf golang.tar.gz && \
+                  ln -s /usr/local/go/bin/go /usr/local/bin && \
+                        rm golang.tar.gz
+
+RUN apt-get install -y --no-install-recommends \
+`# Haskell dependencies` \
+      ghc \
+      cabal-install
+
+RUN apt-get install -y --no-install-recommends \
+`# Haxe dependencies` \
+      haxe \
+      neko \
+      neko-dev && \
+    haxelib setup --always /usr/share/haxe/lib && \
+    haxelib install --always hxcpp 2>&1 > /dev/null
+
+RUN apt-get install -y --no-install-recommends \
+`# Java dependencies` \
+      ant \
+      ant-optional \
+      maven \
+      openjdk-11-jdk-headless
+
+RUN apt-get install -y --no-install-recommends \
+`# Lua dependencies` \
+      lua5.2 \
+      lua5.2-dev
+# https://bugs.launchpad.net/ubuntu/+source/lua5.3/+bug/1707212
+# lua5.3 does not install alternatives!
+# need to update our luasocket code, lua doesn't have luaL_openlib any more
+
+RUN apt-get install -y --no-install-recommends \
+`# Node.js dependencies` \
+      nodejs
+
+# Test dependencies for running puppeteer
+RUN apt-get install -y --no-install-recommends \
+`# JS dependencies` \
+      libxss1
+
+RUN apt-get install -y --no-install-recommends \
+`# OCaml dependencies` \
+      ocaml \
+      opam && \
+    opam init --yes && \
+    opam install --yes oasis
+
+RUN apt-get install -y --no-install-recommends \
+`# Perl dependencies` \
+      libbit-vector-perl \
+      libclass-accessor-class-perl \
+      libcrypt-ssleay-perl \
+      libio-socket-ssl-perl \
+      libnet-ssleay-perl \
+      libtest-exception-perl
+
+RUN apt-get install -y --no-install-recommends \
+`# Php dependencies` \
+      php \
+      php-cli \
+      php-dev \
+      php-json \
+      php-pear \
+      re2c \
+      composer
+
+RUN apt-get install -y --no-install-recommends \
+`# Python dependencies` \
+      python-all \
+      python-all-dbg \
+      python-all-dev \
+      python-ipaddress \
+      python-pip \
+      python-setuptools \
+      python-six \
+      python-tornado \
+      python-twisted \
+      python-wheel \
+      python-zope.interface && \
+   pip install --upgrade backports.ssl_match_hostname
+
+RUN apt-get install -y --no-install-recommends \
+`# Python3 dependencies` \
+      python3-all \
+      python3-all-dbg \
+      python3-all-dev \
+      python3-pip \
+      python3-setuptools \
+      python3-six \
+      python3-tornado \
+      python3-twisted \
+      python3-wheel \
+      python3-zope.interface
+
+RUN apt-get install -y --no-install-recommends \
+`# Ruby dependencies` \
+      ruby \
+      ruby-dev \
+      ruby-bundler
+
+# Rust dependencies
+RUN curl https://sh.rustup.rs -sSf | sh -s -- --default-toolchain 1.40.0 -y
+ENV PATH /root/.cargo/bin:$PATH
+
+# Swift on Linux for cross tests
+RUN cd / && \
+    wget --quiet https://swift.org/builds/swift-5.1.4-release/ubuntu1804/swift-5.1.4-RELEASE/swift-5.1.4-RELEASE-ubuntu18.04.tar.gz && \
+    tar xf swift-5.1.4-RELEASE-ubuntu18.04.tar.gz --strip-components=1 && \
+    rm swift-5.1.4-RELEASE-ubuntu18.04.tar.gz && \
+    swift --version
+
+# cppcheck-1.82 has a nasty cpp parser bug, so we're using something newer
+RUN apt-get install -y --no-install-recommends \
+`# Static Code Analysis dependencies` \
+      cppcheck \
+      sloccount && \
+    pip install flake8 && \
+    wget -q "https://launchpad.net/ubuntu/+source/cppcheck/1.83-2/+build/14874703/+files/cppcheck_1.83-2_amd64.deb" && \
+    dpkg -i cppcheck_1.83-2_amd64.deb && \
+    rm cppcheck_1.83-2_amd64.deb
+
+# Clean up
+RUN rm -rf /var/cache/apt/* && \
+    rm -rf /var/lib/apt/lists/* && \
+    rm -rf /tmp/* && \
+    rm -rf /var/tmp/*
+
+ENV THRIFT_ROOT /thrift
+RUN mkdir -p $THRIFT_ROOT/src
+COPY Dockerfile $THRIFT_ROOT/
+WORKDIR $THRIFT_ROOT/src
